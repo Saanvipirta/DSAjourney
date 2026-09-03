@@ -27,8 +27,8 @@ This repository documents my journey of learning and practicing Data Structures 
 - [ ] Dynamic Programming
 
 🏆 Milestones
-- [ ] 100 Problems
-- [ ] 100 Days of Consistency 🔥
+- [ ] _ Problems
+- [ ] _ Days of Consistency 🔥
 
 
 «One problem at a time. One day at a time.»
