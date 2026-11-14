@@ -1,0 +1,59 @@
+//Given a matrix mat[][] of size n × n, compute its transpose. The transpose of a matrix is obtained by converting its rows into columns and its columns into rows.
+#include <stdio.h>
+#include <stdlib.h>
+
+int **transpose(int **mat, int n) {
+    
+    // Traverse the upper triangle of the matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            
+            // Swap elements across the diagonal
+            int temp = mat[i][j];
+            mat[i][j] = mat[j][i];
+            mat[j][i] = temp;
+        }
+    }
+
+    return mat;
+}
+
+int main() {
+    
+    int n = 4;
+
+    int **mat = (int **)malloc(n * sizeof(int *));
+
+    for (int i = 0; i < n; i++) {
+        mat[i] = (int *)malloc(n * sizeof(int));
+    }
+
+    int values[4][4] = {
+        {1, 1, 1, 1},
+        {2, 2, 2, 2},
+        {3, 3, 3, 3},
+        {4, 4, 4, 4}
+    };
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            mat[i][j] = values[i][j];
+        }
+    }
+
+    int **res = transpose(mat, n);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%d ", res[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < n; i++) {
+        free(mat[i]);
+    }
+    free(mat);
+
+    return 0;
+}
