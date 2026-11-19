@@ -1,0 +1,71 @@
+//Given a 2D grid m*n of characters and a word, find all occurrences of the given word in the grid. A word can be matched in all 8 directions at any point. Word is said to be found in a direction if all characters match in this direction (not in zig-zag form).
+The 8 directions are, Horizontally Left, Horizontally Right, Vertically Up, Vertically Down and 4 Diagonal directions.
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+int search(char grid[MAX][MAX], int m, int n,
+           char word[], int row, int col, int dir) {
+
+    int len = strlen(word);
+
+    for (int k = 0; k < len; k++) {
+        int x = row + k * dx[dir];
+        int y = col + k * dy[dir];
+
+        if (x < 0 || x >= m || y < 0 || y >= n)
+            return 0;
+
+        if (grid[x][y] != word[k])
+            return 0;
+    }
+
+    return 1;
+}
+
+int main() {
+    int m, n;
+    char grid[MAX][MAX], word[MAX];
+    int found = 0;
+
+    printf("Enter rows and columns: ");
+    scanf("%d %d", &m, &n);
+
+    printf("Enter grid:\n");
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf(" %c", &grid[i][j]);
+        }
+    }
+
+    printf("Enter word: ");
+    scanf("%99s", word);
+
+    printf("Word found at:\n");
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+
+            if (grid[i][j] == word[0]) {
+                for (int d = 0; d < 8; d++) {
+
+                    if (search(grid, m, n, word, i, j, d)) {
+                        printf("(%d, %d) Direction: %d\n",
+                               i, j, d);
+                        found = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!found)
+        printf("Word not found\n");
+
+    return 0;
+}
