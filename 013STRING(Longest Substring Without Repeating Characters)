@@ -1,0 +1,47 @@
+//Given a string s having lowercase characters, find the length of the longest substring without repeating characters. 
+
+#include <stdio.h>
+#include <string.h>
+
+int longestUniqueSubstring(char s[]) {
+    int last[26];
+
+    // Initialize all positions to -1
+    for (int i = 0; i < 26; i++) {
+        last[i] = -1;
+    }
+
+    int start = 0;
+    int maxLength = 0;
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        int index = s[i] - 'a';
+
+        // If character is already present in current window
+        if (last[index] >= start) {
+            start = last[index] + 1;
+        }
+
+        // Update last occurrence
+        last[index] = i;
+
+        // Current substring length
+        int currentLength = i - start + 1;
+
+        if (currentLength > maxLength) {
+            maxLength = currentLength;
+        }
+    }
+
+    return maxLength;
+}
+
+int main() {
+    char s[1000];
+
+    scanf("%999s", s);
+
+    printf("%d\n", longestUniqueSubstring(s));
+
+    return 0;
+}
