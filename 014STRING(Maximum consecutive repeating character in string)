@@ -1,0 +1,38 @@
+//Given astring s, the task is to find the maximum consecutive repeating character in the string
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char s[100];
+    int count = 1, maxCount = 1;
+    char maxChar;
+
+    printf("Enter string: ");
+    scanf("%99s", s);
+
+    int n = strlen(s);
+
+    if (n == 0)
+        return 0;
+
+    maxChar = s[0];
+
+    for (int i = 1; i < n; i++) {
+        if (s[i] == s[i - 1]) {
+            count++;
+        } else {
+            count = 1;
+        }
+
+        if (count > maxCount) {
+            maxCount = count;
+            maxChar = s[i];
+        }
+    }
+
+    printf("Character: %c\n", maxChar);
+    printf("Maximum count: %d\n", maxCount);
+
+    return 0;
+}
