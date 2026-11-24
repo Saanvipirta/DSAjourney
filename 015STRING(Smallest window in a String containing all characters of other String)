@@ -1,0 +1,85 @@
+/*Given two strings s and p, find the smallest substring in s consisting of all the characters (including duplicates) of the string p.
+Return an empty string in case no such substring is present. 
+If there are multiple such substrings of the same length found, return the one with the least starting index.
+*/
+#include <limits.h>
+#include <stdio.h>
+#include <string.h>
+
+char *minWindow(char *s, char *p)
+{
+    int len1 = strlen(s);
+    int len2 = strlen(p);
+
+    // If s is shorter than p, no valid window is possible
+    if (len1 < len2)
+        return "";
+
+    int countP[256] = {0};
+    int countS[256] = {0};
+
+    // Store the frequency of characters in p
+    for (int i = 0; i < len2; i++)
+        countP[(unsigned char)p[i]]++;
+
+    int start = 0, start_idx = -1;
+    int min_len = INT_MAX;
+    int count = 0;
+
+    // Expand the window using the right pointer
+    for (int j = 0; j < len1; j++)
+    {
+        unsigned char c = (unsigned char)s[j];
+        countS[c]++;
+
+        // Count only required character occurrences
+        if (countP[c] != 0 && countS[c] <= countP[c])
+            count++;
+
+        // When all required characters are matched
+        if (count == len2)
+        {
+            // Shrink the window from the left
+            while (countS[(unsigned char)s[start]] > countP[(unsigned char)s[start]] ||
+                   countP[(unsigned char)s[start]] == 0)
+            {
+                unsigned char left = (unsigned char)s[start];
+
+                if (countS[left] > countP[left])
+                    countS[left]--;
+
+                start++;
+            }
+
+            // Update the smallest valid window
+            int len = j - start + 1;
+
+            if (len < min_len)
+            {
+                min_len = len;
+                start_idx = start;
+            }
+        }
+    }
+
+    // Return an empty string if no valid window exists
+    if (start_idx == -1)
+        return "";
+
+    // Create and return the smallest substring
+    static char result[100000];
+    strncpy(result, s + start_idx, min_len);
+    result[min_len] = '\0';
+
+    return result;
+}
+
+int main()
+{
+    char s[] = "zoomlazapzo";
+    char p[] = "oza";
+
+    printf("\"%s\"\n", minWindow(s, p));
+
+    return 0;
+}
