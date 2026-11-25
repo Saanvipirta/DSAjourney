@@ -1,0 +1,85 @@
+/*Given an array arr[] of strings, group all anagrams together. Two strings are anagrams if they contain the same characters with the same frequencies, possibly in a different order.
+
+Return a 2D array, where each inner array contains a group of anagrams. The relative order of strings within each group should be the same as their order in arr.*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int isAnagram(char *a, char *b) {
+    int freq[256] = {0};
+
+    if (strlen(a) != strlen(b))
+        return 0;
+
+    for (int i = 0; a[i] != '\0'; i++) {
+        freq[(unsigned char)a[i]]++;
+        freq[(unsigned char)b[i]]--;
+    }
+
+    for (int i = 0; i < 256; i++) {
+        if (freq[i] != 0)
+            return 0;
+    }
+
+    return 1;
+}
+
+char ***groupAnagrams(char **arr, int n,
+                      int **colSizes, int *groupCount) {
+    char ***result = malloc(n * sizeof(char **));
+    *colSizes = calloc(n, sizeof(int));
+    int *visited = calloc(n, sizeof(int));
+
+    *groupCount = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (visited[i])
+            continue;
+
+        result[*groupCount] = malloc(n * sizeof(char *));
+
+        for (int j = i; j < n; j++) {
+            if (!visited[j] && isAnagram(arr[i], arr[j])) {
+                result[*groupCount][(*colSizes)[*groupCount]++] = arr[j];
+                visited[j] = 1;
+            }
+        }
+
+        (*groupCount)++;
+    }
+
+    free(visited);
+    return result;
+}
+
+int main() {
+    char *arr[] = {"eat", "tea", "tan", "ate", "nat", "bat"};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    int *colSizes;
+    int groupCount;
+
+    char ***result = groupAnagrams(arr, n,
+                                   &colSizes, &groupCount);
+
+    for (int i = 0; i < groupCount; i++) {
+        printf("[");
+        for (int j = 0; j < colSizes[i]; j++) {
+            printf("%s", result[i][j]);
+
+            if (j < colSizes[i] - 1)
+                printf(", ");
+        }
+        printf("]\n");
+    }
+
+    for (int i = 0; i < groupCount; i++)
+        free(result[i]);
+
+    free(result);
+    free(colSizes);
+
+    return 0;
+}
