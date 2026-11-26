@@ -1,0 +1,51 @@
+//Given a sentence s, determine whether it is a palindrome sentence or not. A palindrome sentence is a sequence of characters that reads the same forward and backward after:
+
+Converting all uppercase letters to lowercase.
+Removing all non-alphanumeric characters (i.e., ignore spaces, punctuation, and symbols).
+
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+
+bool isPalindrome(char s[]) {
+    int left = 0;
+    int right = strlen(s) - 1;
+
+    while (left < right) {
+        if (!isalnum((unsigned char)s[left])) {
+            left++;
+            continue;
+        }
+
+        if (!isalnum((unsigned char)s[right])) {
+            right--;
+            continue;
+        }
+
+        if (tolower((unsigned char)s[left]) !=
+            tolower((unsigned char)s[right])) {
+            return false;
+        }
+
+        left++;
+        right--;
+    }
+
+    return true;
+}
+
+int main() {
+    char s[1000];
+
+    fgets(s, sizeof(s), stdin);
+
+    if (isPalindrome(s))
+        printf("true");
+    else
+        printf("false");
+
+    return 0;
+}
